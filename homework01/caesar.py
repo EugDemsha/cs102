@@ -1,7 +1,9 @@
 import typing as tp
 
 
+
 def encrypt_caesar(plaintext: str, shift: int = 3) -> str:
+
     """
     Encrypts plaintext using a Caesar cipher.
 
@@ -16,6 +18,17 @@ def encrypt_caesar(plaintext: str, shift: int = 3) -> str:
     """
     ciphertext = ""
     # PUT YOUR CODE HERE
+    for a in plaintext:
+        if a.isalpha():
+            if a.istitle():
+                a = chr(ord(a) + shift)
+                if ord(a) > ord("Z"):
+                    a = chr(ord(a) - 26)
+            else:
+                a = chr(ord(a) + shift)
+                if ord(a) > ord("z"):
+                    a = chr(ord(a) - 26)
+        ciphertext += a
     return ciphertext
 
 
@@ -34,6 +47,17 @@ def decrypt_caesar(ciphertext: str, shift: int = 3) -> str:
     """
     plaintext = ""
     # PUT YOUR CODE HERE
+    for a in ciphertext:
+        if a.isalpha():
+            if a.istitle():
+                a = chr(ord(a) - shift)
+                if ord(a) < ord("A"):
+                    a = chr(ord(a) + 26)
+            else:
+                a = chr(ord(a) - shift)
+                if ord(a) < ord("a"):
+                    a = chr(ord(a) + 26)
+        plaintext += a
     return plaintext
 
 
