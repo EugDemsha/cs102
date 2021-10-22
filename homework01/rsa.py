@@ -14,8 +14,16 @@ def is_prime(n: int) -> bool:
     False
     """
     # PUT YOUR CODE HERE
-
-    pass
+    if 0 < n <= 2:
+        return True
+    elif n < 0:
+        return False
+    else:
+        for i in range(2, n):
+            if (n / i).is_integer():
+                return False
+            else:
+                return True
 
 
 def gcd(a: int, b: int) -> int:
