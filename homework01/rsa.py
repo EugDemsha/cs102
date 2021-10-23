@@ -24,6 +24,7 @@ def is_prime(n: int) -> bool:
                 return False
             else:
                 return True
+    return True
 
 
 def gcd(a: int, b: int) -> int:
