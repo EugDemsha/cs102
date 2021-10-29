@@ -10,30 +10,28 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
     'LXFOPVEFRNHR'
     """
     ciphertext = ""
-    # PUT YOUR CODE HERE
-    if len(keyword) < len(plaintext):
-        for i in keyword:
-            if len(keyword) < len(plaintext):
-                keyword += i
-        return encrypt_vigenere(plaintext, keyword)
+    count = 0
+    while len(plaintext) > len(keyword):
+        keyword += keyword[count]
+        count += 1
     else:
-        for a in range(len(plaintext)):
-            b = plaintext[a]
-            c = keyword[a]
-            if c.istitle():
-                shift = ord(c) - ord("A")
+        for num in range(len(plaintext)):
+            symbol_to_code = plaintext[num]
+            key_symbol = keyword[num]
+            if key_symbol.isupper():
+                shift = ord(key_symbol) - ord("A")
             else:
-                shift = ord(c) - ord("a")
-            if b.isalpha():
-                if b.istitle():
-                    b = chr(ord(b) + shift)
-                    if ord(b) > ord("Z"):
-                        b = chr(ord(b) - 26)
+                shift = ord(key_symbol) - ord("a")
+            if symbol_to_code.isalpha():
+                if symbol_to_code.isupper():
+                    symbol_to_code = chr(ord(symbol_to_code) + shift)
+                    if ord(symbol_to_code) > ord("Z"):
+                        symbol_to_code = chr(ord(symbol_to_code) - 26)
                 else:
-                    b = chr(ord(b) + shift)
-                    if ord(b) > ord("z"):
-                        b = chr(ord(b) - 26)
-            ciphertext += b
+                    symbol_to_code = chr(ord(symbol_to_code) + shift)
+                    if ord(symbol_to_code) > ord("z"):
+                        symbol_to_code = chr(ord(symbol_to_code) - 26)
+            ciphertext += symbol_to_code
 
     return ciphertext
 
@@ -50,29 +48,27 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
     'ATTACKATDAWN'
     """
     plaintext = ""
-    # PUT YOUR CODE HERE
-    if len(keyword) < len(ciphertext):
-        for i in keyword:
-            if len(keyword) < len(ciphertext):
-                keyword += i
-        return decrypt_vigenere(ciphertext, keyword)
+    count = 0
+    while len(ciphertext) > len(keyword):
+        keyword += keyword[count]
+        count += 1
     else:
-        for a in range(len(ciphertext)):
-            b = ciphertext[a]
-            c = keyword[a]
-            if c.istitle():
-                shift = ord(c) - ord("A")
+        for num in range(len(ciphertext)):
+            symbol_to_decode = ciphertext[num]
+            key_symbol = keyword[num]
+            if key_symbol.isupper():
+                shift = ord(key_symbol) - ord("A")
             else:
-                shift = ord(c) - ord("a")
-            if b.isalpha():
-                if b.istitle():
-                    b = chr(ord(b) - shift)
-                    if ord(b) < ord("A"):
-                        b = chr(ord(b) + 26)
+                shift = ord(key_symbol) - ord("a")
+            if symbol_to_decode.isalpha():
+                if symbol_to_decode.isupper():
+                    symbol_to_decode = chr(ord(symbol_to_decode) - shift)
+                    if ord(symbol_to_decode) < ord("A"):
+                        symbol_to_decode = chr(ord(symbol_to_decode) + 26)
                 else:
-                    b = chr(ord(b) - shift)
-                    if ord(b) < ord("a"):
-                        b = chr(ord(b) + 26)
-            plaintext += b
+                    symbol_to_decode = chr(ord(symbol_to_decode) - shift)
+                    if ord(symbol_to_decode) < ord("a"):
+                        symbol_to_decode = chr(ord(symbol_to_decode) + 26)
+            plaintext += symbol_to_decode
 
     return plaintext

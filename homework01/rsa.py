@@ -13,7 +13,6 @@ def is_prime(n: int) -> bool:
     >>> is_prime(8)
     False
     """
-    # PUT YOUR CODE HERE
     if 1 < n <= 2:
         return True
     elif n <= 1:
@@ -36,14 +35,12 @@ def gcd(a: int, b: int) -> int:
     >>> gcd(3, 7)
     1
     """
-    # PUT YOUR CODE HERE
-    if a != 0 and b != 0:
-        if a < b:
-            a, b = b, a
-        t = a % b
-        return gcd(b, t)
-    else:
-        return a + b
+    while a != 0 and b != 0:
+        if a > b:
+            a = a % b
+        else:
+            b = b % a
+    return a + b
 
 
 def multiplicative_inverse(e: int, phi: int) -> int:
@@ -54,21 +51,20 @@ def multiplicative_inverse(e: int, phi: int) -> int:
     >>> multiplicative_inverse(7, 40)
     23
     """
-    # PUT YOUR CODE HERE
     if phi > e:
         e, phi = phi, e
     a, b = e, phi
     while b > 1:
         t = a % b
         a, b = b, t
-    a1 = a
+    a1 = a # Переменная a1 нужна, чтобы подниматься снизу вверх по воображаемой таблице
     x, y = 0, 1
     while a < e:
         a, b = e, phi
-        while b > a1:
+        while b > a1: # Спускаемся по таблице сверху вниз, а переменная a1 показывает, когда остановиться
             t = a % b
             a, b = b, t
-        a1 = a
+        a1 = a # Обновляем переменную a1 чтобы с каждой итерацией цикла подниматься выше
         x, y = y, x - y * (a // b)
     d = y % e
     if y == 1:
@@ -81,12 +77,8 @@ def generate_keypair(p: int, q: int) -> tp.Tuple[tp.Tuple[int, int], tp.Tuple[in
         raise ValueError("Both numbers must be prime.")
     elif p == q:
         raise ValueError("p and q cannot be equal")
-
     n = p * q
-    # PUT YOUR CODE HERE
-
     phi = (p - 1) * (q - 1)
-    # PUT YOUR CODE HERE
 
     # Choose an integer e such that e and phi(n) are coprime
     e = random.randrange(1, phi)
@@ -102,7 +94,7 @@ def generate_keypair(p: int, q: int) -> tp.Tuple[tp.Tuple[int, int], tp.Tuple[in
 
     # Return public and private keypair
     # Public key is (e, n) and private key is (d, n)
-    return ((e, n), (d, n))
+    return (e, n), (d, n)
 
 
 def encrypt(pk: tp.Tuple[int, int], plaintext: str) -> tp.List[int]:

@@ -16,18 +16,17 @@ def encrypt_caesar(plaintext: str, shift: int = 3) -> str:
     ''
     """
     ciphertext = ""
-    # PUT YOUR CODE HERE
-    for a in plaintext:
-        if a.isalpha():
-            if a.istitle():
-                a = chr(ord(a) + shift)
-                if ord(a) > ord("Z"):
-                    a = chr(ord(a) - 26)
+    for letter in plaintext:
+        if letter.isalpha():
+            if letter.isupper():
+                letter = chr(ord(letter) + shift)
+                if ord(letter) > ord("Z"):
+                    letter = chr(ord(letter) - 26)
             else:
-                a = chr(ord(a) + shift)
-                if ord(a) > ord("z"):
-                    a = chr(ord(a) - 26)
-        ciphertext += a
+                letter = chr(ord(letter) + shift)
+                if ord(letter) > ord("z"):
+                    letter = chr(ord(letter) - 26)
+        ciphertext += letter
     return ciphertext
 
 
@@ -45,18 +44,17 @@ def decrypt_caesar(ciphertext: str, shift: int = 3) -> str:
     ''
     """
     plaintext = ""
-    # PUT YOUR CODE HERE
-    for a in ciphertext:
-        if a.isalpha():
-            if a.istitle():
-                a = chr(ord(a) - shift)
-                if ord(a) < ord("A"):
-                    a = chr(ord(a) + 26)
+    for letter in ciphertext:
+        if letter.isalpha():
+            if letter.isupper():
+                letter = chr(ord(letter) - shift)
+                if ord(letter) < ord("A"):
+                    letter = chr(ord(letter) + 26)
             else:
-                a = chr(ord(a) - shift)
-                if ord(a) < ord("a"):
-                    a = chr(ord(a) + 26)
-        plaintext += a
+                letter = chr(ord(letter) - shift)
+                if ord(letter) < ord("a"):
+                    letter = chr(ord(letter) + 26)
+        plaintext += letter
     return plaintext
 
 
