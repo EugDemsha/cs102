@@ -1,5 +1,5 @@
-import random
 import pathlib
+import random
 import typing as tp
 
 T = tp.TypeVar("T")
@@ -112,8 +112,9 @@ def find_empty_positions(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.Tuple[in
     """
     for i in range(len(grid)):
         for j in range(len(grid[i])):
-            if grid[i][j] == '.':
+            if grid[i][j] == ".":
                 return (i, j)
+    return None
 
 
 def find_possible_values(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.Set[str]:
@@ -129,7 +130,11 @@ def find_possible_values(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -
     """
     values = set()
     for n in range(1, 10):
-        if str(n) not in get_row(grid, pos) and str(n) not in get_col(grid, pos) and str(n) not in get_block(grid, pos):
+        if (
+            str(n) not in get_row(grid, pos)
+            and str(n) not in get_col(grid, pos)
+            and str(n) not in get_block(grid, pos)
+        ):
             values.add(str(n))
     return values
 
@@ -155,7 +160,7 @@ def solve(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.List[tp.List[str]]]:
         grid[empty[0]][empty[1]] = a
         if solve(grid):
             return solve(grid)
-    grid[empty[0]][empty[1]] = '.'
+    grid[empty[0]][empty[1]] = "."
     return None
 
 
@@ -166,8 +171,12 @@ def check_solution(solution: tp.List[tp.List[str]]) -> bool:
     flag = True
     for i in range(9):
         diagonal = (i, i)
-        if len(set(get_row(solution, diagonal))) != 9 or len(set(get_col(solution, diagonal))) != 9 or len(
-                set(get_block(solution, diagonal))) != 9:
+        if (
+            len(set(get_row(solution, diagonal))) != 9
+            or len(set(get_col(solution, diagonal))) != 9
+            or len(set(get_block(solution, diagonal))) != 9
+            or solution[i][i] == "."
+        ):
             flag = False
     return flag
 
@@ -196,11 +205,14 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
     """
     empty_grid = [["." for i in range(9)] for j in range(9)]
     grid = solve(empty_grid)
-    if 81 - N > 0:
-        while sum(1 for row in grid for e in row if e == ".") != 81 - N:
-            x = random.randint(0, 8)
-            y = random.randint(0, 8)
-            grid[x][y] = "."
+    if grid:
+        if 81 - N > 0:
+            while sum(1 for row in grid for e in row if e == ".") != 81 - N:
+                x = random.randint(0, 8)
+                y = random.randint(0, 8)
+                grid[x][y] = "."
+    else:
+        grid = [[""]]
     return grid
 
 
@@ -213,4 +225,3 @@ if __name__ == "__main__":
             print(f"Puzzle {fname} can't be solved")
         else:
             display(solution)
-
