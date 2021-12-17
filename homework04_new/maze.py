@@ -115,7 +115,7 @@ def solve_maze(
     :return:
     """
 
-    pass
+    return False
 
 
 def add_path_to_grid(
