@@ -125,7 +125,7 @@ def shortest_path(
     path = [exit_coord]
     x, y = exit_coord[0], exit_coord[1]
     shortest = grid[x][y]
-    k = shortest
+    k = int(shortest)
     while k > 1:
         if x != len(grid) - 1 and grid[x + 1][y] == k - 1:
             x += 1
