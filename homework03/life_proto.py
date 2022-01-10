@@ -29,7 +29,7 @@ class GameOfLife:
         # Скорость протекания игры
         self.speed = speed
 
-        self.grid = None
+        self.grid = self.create_grid(randomize=False)
 
     def draw_lines(self) -> None:
         """Отрисовать сетку"""
@@ -51,7 +51,7 @@ class GameOfLife:
         running = True
         while running:
             for event in pygame.event.get():
-                if event.type == QUIT:
+                if event.type == pygame.QUIT:
                     running = False
             self.draw_lines()
 
