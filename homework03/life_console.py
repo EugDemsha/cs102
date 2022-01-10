@@ -13,7 +13,7 @@ class Console(UI):
         screen.box("|", "-")
 
     def draw_grid(self, screen) -> None:
-        """ Отобразить состояние клеток. """
+        """Отобразить состояние клеток."""
         for y in range(self.life.rows):
             for x in range(self.life.cols):
                 if self.life.curr_generation[y][x] == 0:
