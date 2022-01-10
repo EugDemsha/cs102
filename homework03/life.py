@@ -82,7 +82,7 @@ class GameOfLife:
         """
         Не превысило ли текущее число поколений максимально допустимое.
         """
-        if self.generations >= self.max_generations:
+        if self.max_generations and self.generations >= self.max_generations:
             return True
         return False
 
