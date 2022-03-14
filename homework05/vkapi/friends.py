@@ -79,7 +79,7 @@ def get_mutual(
         active = response.json()["response"]
 
     else:
-        for i in range(((len(target_uids) - 1) // 100) + 1):
+        for i in range(((len(target_uids) - 1) // 100) + 1):  # type: ignore
             try:
                 mutual_friends = s.get(
                     "friends.getMutual",
@@ -88,7 +88,7 @@ def get_mutual(
                         "v": config.VK_CONFIG["version"],
                         "source_uid": source_uid,
                         "target_uid": target_uid,
-                        "target_uids": ",".join(list(map(str, target_uids))),
+                        "target_uids": ",".join(list(map(str, target_uids))),  # type: ignore
                         "order": order,
                         "count": 100,
                         "offset": i * 100,
