@@ -21,8 +21,8 @@ def ego_network(
     mutuals = get_mutual(source_uid=user_id, target_uids=friends)
     print(mutuals)
     for m in mutuals:
-        friend_id = m["id"] # type: ignore
-        for c in m["common_friends"]: # type: ignore
+        friend_id = m["id"]  # type: ignore
+        for c in m["common_friends"]:  # type: ignore
             great_list.append((friend_id, c))
 
     return great_list
