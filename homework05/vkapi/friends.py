@@ -83,7 +83,7 @@ def get_mutual(
         tries = ((len(target_uids) - 1) // 100) + 1  # type: ignore
         for i in range(tries):
             try:
-                url = f"friends.getMutual?access_token={access_token}&source_uid={source_uid}&target_uid={target_uid}&target_uids={','.join([str(t) for t in target_uids])}&count={count}&offset={i*100}&v={v}"
+                url = f"friends.getMutual?access_token={access_token}&source_uid={source_uid}&target_uid={target_uid}&target_uids={','.join([str(t) for t in target_uids])}&count={count}&offset={i*100}&v={v}"  # type: ignore
                 response = s.get(url)
                 for friend in response.json()["response"]:
                     active.append(
