@@ -5,6 +5,7 @@ import typing as tp
 
 from vkapi import config, session
 from vkapi.exceptions import APIError
+from vkapi.session import Session
 
 QueryParams = tp.Optional[tp.Dict[str, tp.Union[str, int]]]
 
@@ -28,7 +29,18 @@ def get_friends(
     :param fields: Список полей, которые нужно получить для каждого пользователя.
     :return: Список идентификаторов друзей пользователя или список пользователей.
     """
-    pass
+    domain = config.VK_CONFIG["domain"]
+    access_token = config.VK_CONFIG["access_token"]
+    v = config.VK_CONFIG["version"]
+
+    url = (
+        f"friends.get?access_token={access_token}&user_id={user_id}&fields={fields}&offset={offset}&count"
+        f"={count}&v={v}"
+    )
+    s = Session(base_url=domain)
+    response = s.get(url=url)
+    fr = FriendsResponse(response.json()["response"]["count"], response.json()["response"]["items"])
+    return fr
 
 
 class MutualFriends(tp.TypedDict):
@@ -57,4 +69,32 @@ def get_mutual(
     :param offset: Смещение, необходимое для выборки определенного подмножества общих друзей.
     :param progress: Callback для отображения прогресса.
     """
-    pass
+    domain = config.VK_CONFIG["domain"]
+    access_token = config.VK_CONFIG["access_token"]
+    v = config.VK_CONFIG["version"]
+    s = Session(base_url=domain)
+    active = []
+
+    if target_uid:
+        url = f"friends.getMutual?access_token={access_token}&source_uid={source_uid}&order={order}&target_uid={target_uid}&offset={offset}&count={count}"
+        response = s.get(url=url)
+        active = response.json()["response"]
+    else:
+        tries = ((len(target_uids) - 1) // 100) + 1  # type: ignore
+        for i in range(tries):
+            try:
+                url = f"friends.getMutual?access_token={access_token}&source_uid={source_uid}&target_uid={target_uid}&target_uids={','.join([str(t) for t in target_uids])}&count={count}&offset={i*100}&v={v}"  # type: ignore
+                response = s.get(url)
+                for friend in response.json()["response"]:
+                    active.append(
+                        MutualFriends(
+                            id=friend["id"],
+                            common_friends=[int(f) for f in friend["common_friends"]],
+                            common_count=friend["common_count"],
+                        )
+                    )
+            except:
+                pass
+            time.sleep(0.34)
+
+    return active
