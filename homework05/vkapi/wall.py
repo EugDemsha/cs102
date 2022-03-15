@@ -60,28 +60,26 @@ def get_wall_execute(
     token = config.VK_CONFIG["access_token"]
     v = config.VK_CONFIG["version"]
     s = Session(config.VK_CONFIG["domain"])
-    all_posts = []
-    for q in range(((count - 1) // max_count) + 1):
+    all_data = []
+    for call in range(((count - 1) // max_count) + 1):
         try:
             code = Template(
                 """var posts = []; var i = 0; while (i < $attempts) 
                 {posts = posts + API.wall.get({"owner_id":$owner_id,"domain":"$domain","offset":$offset + i*100,
                 "count":"$count","filter":"$filter","extended":$extended,"fields":'$fields',"v":$version})['items'];
-                 i=i+1;} return {'count': posts.length, 'items': posts};"""
+                 i=i+1;} return {"count": posts.length, "items": posts};"""
             ).substitute(
-                owner_id=owner_id if owner_id else 0,
+                owner_id=owner_id,
                 domain=domain,
-                offset=offset + max_count * q,
-                count=count - max_count * q if count - max_count * q < 101 else 100,
-                attempts=(count - max_count * q - 1) // 100 + 1
-                if count - max_count * q < max_count + 1
-                else max_count // 100,
+                offset=offset + max_count * call,
+                count=count - max_count * call if count - max_count * call < 101 else 100,
+                attempts=(count - max_count * call - 1) // 100 + 1,
                 filter=filter,
                 extended=extended,
                 fields=fields,
-                version=str(v),
+                version=v,
             )
-            posts = s.post(
+            wall_data = s.post(
                 "execute",
                 data={
                     "code": code,
@@ -91,8 +89,8 @@ def get_wall_execute(
             )
             time.sleep(1)
 
-            for one_post in posts.json()["response"]["items"]:
-                all_posts.append(one_post)
+            all_data = [post for post in wall_data.json()["response"]["items"]]
         except:
             pass
-    return json_normalize(all_posts)
+
+    return json_normalize(all_data)

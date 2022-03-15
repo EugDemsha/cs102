@@ -71,34 +71,25 @@ def get_mutual(
     """
     domain = config.VK_CONFIG["domain"]
     access_token = config.VK_CONFIG["access_token"]
+    v = config.VK_CONFIG["version"]
     s = Session(base_url=domain)
     active = []
+
     if target_uid:
         url = f"friends.getMutual?access_token={access_token}&source_uid={source_uid}&order={order}&target_uid={target_uid}&offset={offset}&count={count}"
         response = s.get(url=url)
         active = response.json()["response"]
-
     else:
-        for i in range(((len(target_uids) - 1) // 100) + 1):  # type: ignore
+        tries = ((len(target_uids) - 1) // 100) + 1  # type: ignore
+        for i in range(tries):
             try:
-                mutual_friends = s.get(
-                    "friends.getMutual",
-                    params={
-                        "access_token": config.VK_CONFIG["access_token"],
-                        "v": config.VK_CONFIG["version"],
-                        "source_uid": source_uid,
-                        "target_uid": target_uid,
-                        "target_uids": ",".join(list(map(str, target_uids))),  # type: ignore
-                        "order": order,
-                        "count": 100,
-                        "offset": i * 100,
-                    },
-                )
-                for friend in mutual_friends.json()["response"]:
+                url = f"friends.getMutual?access_token={access_token}&source_uid={source_uid}&target_uid={target_uid}&target_uids={','.join(list(map(str, target_uids)))}&count={count}&offset={i*100}&v={v}"
+                response = s.get(url)
+                for friend in response.json()["response"]:
                     active.append(
                         MutualFriends(
                             id=friend["id"],
-                            common_friends=list(map(int, friend["common_friends"])),
+                            common_friends=[int(f) for f in friend["common_friends"]],
                             common_count=friend["common_count"],
                         )
                     )
