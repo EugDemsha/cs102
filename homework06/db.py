@@ -22,7 +22,7 @@ def create_db(news_list):
         s.commit()
 
 
-class News(Base):
+class News(Base):  # type: ignore
     __tablename__ = "news"
     id = Column(Integer, primary_key=True)
     title = Column(String)
