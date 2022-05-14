@@ -17,7 +17,7 @@ class NaiveBayesClassifier:
         return [no_wspace_string][0].split()
 
     def fit(self, X, y):
-        """ Fit Naive Bayes classifier according to X, y. """
+        """Fit Naive Bayes classifier according to X, y."""
         self.class_count = dict.fromkeys(set(y), 0)
         d = 0
         for i in range(len(X)):
@@ -37,7 +37,7 @@ class NaiveBayesClassifier:
                 )
 
     def predict(self, X):
-        """ Perform classification on an array of test vectors X. """
+        """Perform classification on an array of test vectors X."""
         prediction = []
         for x in X:
             lst_x = self.norm(x)
@@ -57,6 +57,6 @@ class NaiveBayesClassifier:
         return prediction
 
     def score(self, X_test, y_test):
-        """ Returns the mean accuracy on the given test data and labels. """
+        """Returns the mean accuracy on the given test data and labels."""
         pr = self.predict(X_test)
         return accuracy_score(pr, y_test)
